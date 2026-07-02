@@ -3,7 +3,7 @@ import Link from "next/link";
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen text-foreground">
-      <header className="border-b border-border bg-white/80 backdrop-blur-md sticky top-0 z-50">
+      <header className="border-b border-border bg-white">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 sm:px-8 lg:px-12">
           <Link href="/" className="flex items-center gap-2.5">
             <img src="/logo.png" alt="Mão na Roda" className="h-32 w-auto" />

@@ -7,7 +7,7 @@ import type { ProviderRecord } from "@/lib/firebase-service";
 
 export default function BuscarPage() {
   const [service, setService] = useState("Todos");
-  const [distanceFilter, setDistanceFilter] = useState("Todos");
+  const [distanceFilter, setDistanceFilter] = useState("");
   const [providers, setProviders] = useState<ProviderRecord[]>([]);
 
   useEffect(() => {
@@ -30,9 +30,7 @@ export default function BuscarPage() {
       const svcs = provider.services || [];
       const matchesService = service === "Todos" || svcs.includes(service) || provider.service === service;
       const matchesDistance =
-        distanceFilter === "Todos" ||
-        (distanceFilter === "Até 3 km" && Number(provider.radius) <= 3) ||
-        (distanceFilter === "Até 5 km" && Number(provider.radius) <= 5);
+        !distanceFilter || Number(provider.radius) <= Number(distanceFilter);
       return matchesService && matchesDistance;
     });
   }, [distanceFilter, providers, service]);
@@ -68,16 +66,15 @@ export default function BuscarPage() {
           </div>
 
           <div className="min-w-[160px] flex-1">
-            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted">Distância</label>
-            <select
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted">Distância máxima (km)</label>
+            <input
+              type="number"
+              min="1"
               value={distanceFilter}
               onChange={(event) => setDistanceFilter(event.target.value)}
-              className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
-            >
-              <option>Todos</option>
-              <option>Até 3 km</option>
-              <option>Até 5 km</option>
-            </select>
+              placeholder="Ex.: 10"
+              className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted/50 focus:border-brand focus:ring-2 focus:ring-brand/10"
+            />
           </div>
         </div>
 
