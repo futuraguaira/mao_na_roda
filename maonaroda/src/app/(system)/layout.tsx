@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export default function SystemLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen text-foreground">
       <header className="border-b border-border bg-white">

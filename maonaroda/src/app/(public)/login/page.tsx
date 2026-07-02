@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { signIn, signUp } from "@/lib/firebase-auth";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -19,8 +21,8 @@ export default function LoginPage() {
         setMessage("Conta criada com sucesso.");
       } else {
         await signIn(email, password);
-        setMessage("Login realizado com sucesso.");
       }
+      router.push("/buscar");
     } catch {
       setMessage("Não foi possível concluir a autenticação.");
     }

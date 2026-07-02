@@ -33,7 +33,7 @@ export default function Home() {
               </p>
               <div className="flex flex-wrap gap-4">
                 <Link
-                  href="/buscar"
+                  href="/login"
                   className="inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-semibold text-white shadow-lg shadow-brand/25 transition-all hover:bg-brand-dark hover:shadow-xl hover:shadow-brand/30 active:scale-[0.98]"
                 >
                   Buscar prestadores
@@ -127,7 +127,7 @@ export default function Home() {
             Milhares de prestadores já estão conectando com novos clientes. Cadastre-se gratuitamente e comece hoje.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link href="/cadastro-prestador" className="inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-semibold text-white shadow-lg shadow-brand/25 transition-all hover:bg-brand-dark active:scale-[0.98]">
+            <Link href="/login" className="inline-flex items-center gap-2 rounded-xl bg-brand px-6 py-3.5 font-semibold text-white shadow-lg shadow-brand/25 transition-all hover:bg-brand-dark active:scale-[0.98]">
               Cadastrar perfil
             </Link>
             <Link href="/buscar" className="inline-flex items-center gap-2 rounded-xl border-2 border-border bg-white px-6 py-3.5 font-semibold text-foreground transition-all hover:border-brand/30 hover:bg-brand/5 active:scale-[0.98]">
