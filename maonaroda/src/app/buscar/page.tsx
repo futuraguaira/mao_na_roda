@@ -18,13 +18,17 @@ export default function BuscarPage() {
 
   const serviceOptions = useMemo(() => {
     const unique = new Set<string>();
-    providers.forEach((p) => p.services.forEach((s) => unique.add(s)));
+    providers.forEach((p) => {
+      (p.services || []).forEach((s) => unique.add(s));
+      if (p.service) unique.add(p.service);
+    });
     return ["Todos", ...Array.from(unique).sort()];
   }, [providers]);
 
   const filteredProviders = useMemo(() => {
     return providers.filter((provider) => {
-      const matchesService = service === "Todos" || provider.services.includes(service);
+      const svcs = provider.services || [];
+      const matchesService = service === "Todos" || svcs.includes(service) || provider.service === service;
       const matchesDistance =
         distanceFilter === "Todos" ||
         (distanceFilter === "Até 3 km" && Number(provider.radius) <= 3) ||
@@ -94,7 +98,7 @@ export default function BuscarPage() {
                   </div>
                   <div>
                     <h2 className="font-semibold text-foreground">{provider.name}</h2>
-                    <p className="text-sm font-medium text-brand">{provider.services[0]}</p>
+                    <p className="text-sm font-medium text-brand">{provider.services?.[0] || provider.service || ""}</p>
                   </div>
                 </div>
                 <span className="rounded-md bg-brand/5 px-2.5 py-1 text-xs font-semibold text-brand">

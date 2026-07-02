@@ -14,6 +14,7 @@ export type ProviderRecord = {
   zipCode: string;
   addressComplement: string;
   services: string[];
+  service?: string;
   radius: string;
   availability: string;
   notes: string;
