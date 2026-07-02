@@ -27,26 +27,38 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(135deg,_#fef3c7_0%,_#f8fafc_100%)] px-6 py-16 text-slate-900 sm:px-8 lg:px-12">
-      <div className="mx-auto max-w-md rounded-3xl border border-amber-200 bg-white/90 p-8 shadow-xl shadow-amber-100 backdrop-blur sm:p-10">
-        <span className="inline-flex rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">
-          Autenticação Firebase
-        </span>
-        <h1 className="mt-4 text-3xl font-semibold">Acesse sua conta</h1>
-        <p className="mt-3 text-slate-600">Cadastre-se ou entre para continuar usando o Mão na Roda.</p>
+    <div className="flex min-h-[calc(100vh-64px)] items-center justify-center px-6 py-16">
+      <div className="w-full max-w-md rounded-xl border border-border bg-white p-8 shadow-sm sm:p-10">
+        <div className="text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-4 py-1.5 text-sm font-medium text-brand">
+            Autenticação
+          </span>
+          <h1 className="font-display mt-4 text-2xl font-bold text-foreground sm:text-3xl">
+            {mode === "login" ? "Acesse sua conta" : "Criar conta"}
+          </h1>
+          <p className="mt-2 text-sm text-muted">
+            {mode === "login"
+              ? "Entre para continuar usando o Mão na Roda."
+              : "Cadastre-se para começar a usar."}
+          </p>
+        </div>
 
-        <div className="mt-6 flex gap-2">
+        <div className="mt-6 flex gap-2 rounded-lg border border-border bg-background p-1">
           <button
             type="button"
             onClick={() => setMode("login")}
-            className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "login" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700"}`}
+            className={`flex-1 rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
+              mode === "login" ? "bg-white text-foreground shadow-sm" : "text-muted hover:text-foreground"
+            }`}
           >
             Entrar
           </button>
           <button
             type="button"
             onClick={() => setMode("signup")}
-            className={`rounded-full px-4 py-2 text-sm font-semibold ${mode === "signup" ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-700"}`}
+            className={`flex-1 rounded-md px-4 py-2 text-sm font-semibold transition-colors ${
+              mode === "signup" ? "bg-white text-foreground shadow-sm" : "text-muted hover:text-foreground"
+            }`}
           >
             Cadastrar
           </button>
@@ -54,7 +66,7 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="email">
+            <label className="mb-1.5 block text-sm font-medium text-foreground" htmlFor="email">
               E-mail
             </label>
             <input
@@ -63,12 +75,13 @@ export default function LoginPage() {
               required
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted/50 focus:border-brand focus:ring-2 focus:ring-brand/10"
+              placeholder="seu@email.com"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-medium text-slate-700" htmlFor="password">
+            <label className="mb-1.5 block text-sm font-medium text-foreground" htmlFor="password">
               Senha
             </label>
             <input
@@ -77,20 +90,25 @@ export default function LoginPage() {
               required
               value={password}
               onChange={(event) => setPassword(event.target.value)}
-              className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-amber-400"
+              className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition placeholder:text-muted/50 focus:border-brand focus:ring-2 focus:ring-brand/10"
+              placeholder="••••••••"
             />
           </div>
 
           <button
             type="submit"
-            className="w-full rounded-full bg-amber-400 px-5 py-3 font-semibold text-slate-950 transition hover:bg-amber-300"
+            className="w-full rounded-lg bg-brand px-5 py-3 font-semibold text-white shadow-lg shadow-brand/20 transition-all hover:bg-brand-dark active:scale-[0.98]"
           >
             {mode === "login" ? "Entrar" : "Criar conta"}
           </button>
         </form>
 
-        {message ? <p className="mt-4 text-sm text-slate-600">{message}</p> : null}
+        {message ? (
+          <div className="mt-4 rounded-lg border border-brand/20 bg-brand/5 p-3 text-center text-sm text-brand">
+            {message}
+          </div>
+        ) : null}
       </div>
-    </main>
+    </div>
   );
 }

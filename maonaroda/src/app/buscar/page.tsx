@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { services } from "@/lib/mock-data";
 import { getProviders } from "@/lib/firebase-service";
 import type { ProviderRecord } from "@/lib/firebase-service";
 
@@ -17,9 +16,15 @@ export default function BuscarPage() {
       .catch(() => setProviders([]));
   }, []);
 
+  const serviceOptions = useMemo(() => {
+    const unique = new Set<string>();
+    providers.forEach((p) => p.services.forEach((s) => unique.add(s)));
+    return ["Todos", ...Array.from(unique).sort()];
+  }, [providers]);
+
   const filteredProviders = useMemo(() => {
     return providers.filter((provider) => {
-      const matchesService = service === "Todos" || provider.service === service;
+      const matchesService = service === "Todos" || provider.services.includes(service);
       const matchesDistance =
         distanceFilter === "Todos" ||
         (distanceFilter === "Até 3 km" && Number(provider.radius) <= 3) ||
@@ -29,88 +34,103 @@ export default function BuscarPage() {
   }, [distanceFilter, providers, service]);
 
   return (
-    <main className="min-h-screen bg-[linear-gradient(135deg,_#fef3c7_0%,_#f8fafc_100%)] px-6 py-16 text-slate-900 sm:px-8 lg:px-12">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8">
-        <section className="rounded-3xl border border-amber-200 bg-white/90 p-8 shadow-xl shadow-amber-100 backdrop-blur sm:p-10">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-            <div className="space-y-3">
-              <span className="inline-flex rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">
-                Busca de prestadores
-              </span>
-              <h1 className="text-3xl font-semibold sm:text-4xl">
-                Encontre ajuda perto de você em poucos segundos.
-              </h1>
-              <p className="max-w-2xl text-lg text-slate-600">
-                Filtre por serviço, distância e veja disponibilidade antes de entrar em contato.
-              </p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-b from-background to-white px-6 py-12 sm:px-8 lg:px-12">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10 space-y-3">
+          <span className="inline-flex items-center gap-2 rounded-full border border-brand/20 bg-brand/5 px-4 py-1.5 text-sm font-medium text-brand">
+            <span className="h-2 w-2 rounded-full bg-brand animate-pulse" />
+            Busca de prestadores
+          </span>
+          <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+            Encontre ajuda perto de você
+          </h1>
+          <p className="max-w-xl text-muted">
+            Filtre por serviço, distância e veja disponibilidade antes de entrar em contato.
+          </p>
+        </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">Serviço</label>
-                <select
-                  value={service}
-                  onChange={(event) => setService(event.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-amber-400"
-                >
-                  {services.map((item) => (
-                    <option key={item}>{item}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-slate-700">Distância</label>
-                <select
-                  value={distanceFilter}
-                  onChange={(event) => setDistanceFilter(event.target.value)}
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none transition focus:border-amber-400"
-                >
-                  <option>Todos</option>
-                  <option>Até 3 km</option>
-                  <option>Até 5 km</option>
-                </select>
-              </div>
-            </div>
+        <div className="mb-8 flex flex-wrap gap-4 rounded-xl border border-border bg-white p-5 shadow-sm">
+          <div className="min-w-[180px] flex-1">
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted">Serviço</label>
+            <select
+              value={service}
+              onChange={(event) => setService(event.target.value)}
+              className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
+            >
+              {serviceOptions.map((item) => (
+                <option key={item}>{item}</option>
+              ))}
+            </select>
           </div>
-        </section>
 
-        <section className="grid gap-6 lg:grid-cols-3">
+          <div className="min-w-[160px] flex-1">
+            <label className="mb-1.5 block text-xs font-semibold uppercase tracking-wider text-muted">Distância</label>
+            <select
+              value={distanceFilter}
+              onChange={(event) => setDistanceFilter(event.target.value)}
+              className="w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-sm text-foreground outline-none transition focus:border-brand focus:ring-2 focus:ring-brand/10"
+            >
+              <option>Todos</option>
+              <option>Até 3 km</option>
+              <option>Até 5 km</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {filteredProviders.length === 0 && (
+            <div className="col-span-full rounded-xl border border-border bg-white p-12 text-center">
+              <p className="text-4xl mb-3">🔍</p>
+              <p className="font-semibold text-foreground">Nenhum prestador encontrado</p>
+              <p className="mt-1 text-sm text-muted">Tente ajustar os filtros para ver mais resultados.</p>
+            </div>
+          )}
           {filteredProviders.map((provider) => (
-            <article key={provider.id} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <article key={provider.id} className="group rounded-xl border border-border bg-white p-6 shadow-sm transition-all hover:shadow-md hover:border-brand/20">
               <div className="flex items-start justify-between gap-3">
-                <div>
-                  <h2 className="text-xl font-semibold text-slate-900">{provider.name}</h2>
-                  <p className="mt-1 text-sm font-medium text-amber-600">{provider.service}</p>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-brand/10 text-sm font-bold text-brand">
+                    {provider.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h2 className="font-semibold text-foreground">{provider.name}</h2>
+                    <p className="text-sm font-medium text-brand">{provider.services[0]}</p>
+                  </div>
                 </div>
-                <span className="rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-700">
+                <span className="rounded-md bg-brand/5 px-2.5 py-1 text-xs font-semibold text-brand">
                   Novo
                 </span>
               </div>
 
-              <div className="mt-5 space-y-2 text-sm text-slate-600">
-                <p>📍 Até {provider.radius} km</p>
-                <p>🗓️ {provider.availability}</p>
+              <div className="mt-4 space-y-1.5 text-sm text-muted">
+                <p className="flex items-center gap-1.5">
+                  <span className="text-foreground/40">📍</span>
+                  Até {provider.radius} km
+                </p>
+                <p className="flex items-center gap-1.5">
+                  <span className="text-foreground/40">🗓️</span>
+                  {provider.availability}
+                </p>
               </div>
 
-              <div className="mt-6 flex flex-wrap gap-3">
+              <div className="mt-5 flex flex-wrap gap-2 border-t border-border pt-4">
                 <Link
                   href={`/prestador/${provider.id}`}
-                  className="rounded-full border border-slate-300 px-4 py-2 text-sm font-semibold text-slate-700 transition hover:border-amber-400 hover:bg-slate-50"
+                  className="flex-1 rounded-lg border border-border px-3 py-2 text-center text-sm font-semibold text-foreground transition-colors hover:border-brand/30 hover:bg-brand/5"
                 >
                   Ver perfil
                 </Link>
                 <a
                   href={`https://wa.me/${provider.phone}?text=Olá%20${encodeURIComponent(provider.name)}!%20Vi%20seu%20perfil%20no%20Mão%20na%20Roda.`}
-                  className="rounded-full bg-slate-900 px-4 py-2 text-sm font-semibold text-white transition hover:bg-slate-700"
+                  className="flex-1 rounded-lg bg-brand px-3 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-brand-dark"
                 >
-                  Chamar no WhatsApp
+                  WhatsApp
                 </a>
               </div>
             </article>
           ))}
-        </section>
+        </div>
       </div>
-    </main>
+    </div>
   );
 }

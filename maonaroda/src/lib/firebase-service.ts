@@ -6,8 +6,14 @@ export type ProviderRecord = {
   name: string;
   phone: string;
   email: string;
-  address: string;
-  service: string;
+  street: string;
+  streetNumber: string;
+  neighborhood: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  addressComplement: string;
+  services: string[];
   radius: string;
   availability: string;
   notes: string;
