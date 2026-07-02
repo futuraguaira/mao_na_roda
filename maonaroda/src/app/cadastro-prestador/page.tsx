@@ -2,9 +2,11 @@
 
 import { useState, type FormEvent, type KeyboardEvent } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { useAuth } from "@/components/AuthProvider";
 import { createProvider } from "@/lib/firebase-service";
 
 export default function CadastroPrestadorPage() {
+  const { user } = useAuth();
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
@@ -67,6 +69,7 @@ export default function CadastroPrestadorPage() {
         notes,
         acceptedTerms,
         consentDate: new Date().toISOString(),
+        ownerId: user!.uid,
       });
       setSubmitted(true);
     } catch {

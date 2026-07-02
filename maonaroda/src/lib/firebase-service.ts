@@ -20,6 +20,7 @@ export type ProviderRecord = {
   notes: string;
   acceptedTerms: boolean;
   consentDate: string;
+  ownerId: string;
   createdAt: string;
 };
 
