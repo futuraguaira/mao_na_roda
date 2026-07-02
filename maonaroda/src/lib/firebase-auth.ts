@@ -1,8 +1,7 @@
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut as firebaseSignOut } from "firebase/auth";
-import { getApp } from "firebase/app";
+import { app } from "@/lib/firebase";
 
 export function getClientAuth() {
-  const app = getApp();
   return getAuth(app);
 }
 
