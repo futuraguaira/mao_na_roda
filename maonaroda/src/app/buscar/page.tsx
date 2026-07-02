@@ -3,27 +3,18 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { services } from "@/lib/mock-data";
-
-type ProviderItem = {
-  id: string;
-  name: string;
-  service: string;
-  radius: string;
-  availability: string;
-  phone: string;
-  notes: string;
-  createdAt: string;
-};
+import { getProviders } from "@/lib/firebase-service";
+import type { ProviderRecord } from "@/lib/firebase-service";
 
 export default function BuscarPage() {
   const [service, setService] = useState("Todos");
   const [distanceFilter, setDistanceFilter] = useState("Todos");
-  const [providers, setProviders] = useState<ProviderItem[]>([]);
+  const [providers, setProviders] = useState<ProviderRecord[]>([]);
 
   useEffect(() => {
-    fetch("/api/providers")
-      .then((response) => response.json())
-      .then((data) => setProviders(Array.isArray(data) ? data : []));
+    getProviders()
+      .then((data) => setProviders(Array.isArray(data) ? data : []))
+      .catch(() => setProviders([]));
   }, []);
 
   const filteredProviders = useMemo(() => {

@@ -2,6 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { providers } from "@/lib/mock-data";
 
+export function generateStaticParams() {
+  return providers.map((provider) => ({ id: String(provider.id) }));
+}
+
 export default async function PrestadorPage({
   params,
 }: {

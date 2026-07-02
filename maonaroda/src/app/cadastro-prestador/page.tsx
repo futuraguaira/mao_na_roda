@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { ProtectedRoute } from "@/components/ProtectedRoute";
+import { createProvider } from "@/lib/firebase-service";
 
 const servicesOptions = [
   "Eletricista",
@@ -48,23 +49,17 @@ export default function CadastroPrestadorPage() {
     }
 
     try {
-      await fetch("/api/providers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          phone,
-          email,
-          address,
-          service: selectedServices[0],
-          radius,
-          availability,
-          notes,
-          acceptedTerms,
-          consentDate: new Date().toISOString(),
-        }),
+      await createProvider({
+        name,
+        phone,
+        email,
+        address,
+        service: selectedServices[0],
+        radius,
+        availability,
+        notes,
+        acceptedTerms,
+        consentDate: new Date().toISOString(),
       });
       setSubmitted(true);
     } catch {
