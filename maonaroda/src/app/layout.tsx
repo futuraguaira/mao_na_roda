@@ -16,6 +16,7 @@ const sora = Sora({
 export const metadata: Metadata = {
   title: "Mão na Roda",
   description: "Conectando prestadores e tomadores de serviço de forma simples.",
+  icons: [{ rel: "icon", url: "/logo.png" }],
 };
 
 export default function RootLayout({
